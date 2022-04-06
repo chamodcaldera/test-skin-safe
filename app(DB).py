@@ -1,8 +1,8 @@
 # Store this code in 'app.py' file
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from flask_mysqldb import MySQL
-import MySQLdb.cursors
-import pymysql
+# from flask_mysqldb import MySQL
+# import MySQLdb.cursors
+# import pymysql
 import re
 import os
 
@@ -211,31 +211,7 @@ def displayProfile():
     return redirect(url_for('login'))
 
 # prescription display
-@app.route("/displayPress")
-def displayPress():
 
-    if 'loggedin' in session:
-        conn = mysqldb.connect()
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Prescription WHERE id = % s', (session['id'],))
-        record = cursor.fetchone()
-        cursor.execute('SELECT * FROM User WHERE id = % s', (session['id'],))
-        account = cursor.fetchone()
-
-        while record is not None:
-            num+1
-            storeFilePath = "static/imageOutput/userId{0}.img".format(str(session['id'])) + str(num) + ".jpg"
-
-            with open(storeFilePath, "wb") as File:
-                File.write(record[2])
-                File.close()
-            record = cursor.fetchone()
-        #display images
-
-        imageList = os.listdir('static/imageOutput')
-        imagelist = ['imageOutput/' + image for image in imageList if ("userId{0}".format(str(session['id']))) in image]
-        return render_template("profile.html", tab=3, account=account,imagelist=imagelist)
-    return redirect(url_for('login'))
 
 # update profile
 @app.route("/updateUser", methods=['GET', 'POST'])
