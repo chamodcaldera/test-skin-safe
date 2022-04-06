@@ -151,7 +151,7 @@ def upload_predict():
 
 @app.route('/submit', methods=['GET', 'POST'])
 def predict_img():
-    return render_template("inner-page.html")
+    return render_template("channelling.html")
 
 
 if __name__ == '__main__':
