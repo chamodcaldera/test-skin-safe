@@ -34,3 +34,36 @@ import logging
 
 
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
+
+
+
+#preprocess the data set
+
+def preprocessdata(sdir, trsplit, vsplit):
+    file_paths = []
+    labels = []
+    classlist = os.listdir(sdir)
+    for klass in classlist:
+        classpath = os.path.join(sdir, klass)
+        flist = os.listdir(classpath)
+        for f in flist:
+            fpath = os.path.join(classpath, f)
+            file_paths.append(fpath)
+            labels.append(klass)
+    Fseries = pd.Series(file_paths, name='filepaths')
+    Lseries = pd.Series(labels, name='labels')
+    df = pd.concat([Fseries, Lseries], axis=1)
+    # split dataframe into train_df and test_df
+    dsplit = vsplit / (1 - trsplit)
+    strat = df['labels']
+    train_df, dummy_df = train_test_split(df, train_size=trsplit, shuffle=True, random_state=123, stratify=strat)
+    strat = dummy_df['labels']
+    valid_df, test_df = train_test_split(dummy_df, train_size=dsplit, shuffle=True, random_state=123, stratify=strat)
+    print('train_df length: ', len(train_df), '  test_df length: ', len(test_df), '  valid_df length: ', len(valid_df))
+    print(train_df['labels'].value_counts())
+    return train_df, test_df, valid_df
+
+
+#dataset path input
+sdir = r'C:\Users\c_chamodkaldera\Downloads\archive\IMG_CLASSES'
+train_df, test_df, valid_df = preprocessdata(sdir, .8, .1)
