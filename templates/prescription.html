@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="../static/styling.css">
+
+    <meta charset="UTF-8">
+    <title>Prescriptions</title>
+
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo"><a href="#">Flexbox</a></h1>
+      <ul class="main-nav">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">Contact</a></li>
+      </ul>
+	</header>
+
+    <h1 class = "heading">Prescription</h1>
+        <div class="gallery">
+            {% for imagelist in imagelist %}
+                <a href="{{ url_for('static', filename=imagelist)}}"><img src = "{{ url_for('static', filename=imagelist)}}" style="width: 250px; height: 200px; justify-content: center"></a>
+            {% endfor %}
+        </div>
+
+
+
+
+</body>
+</html>
