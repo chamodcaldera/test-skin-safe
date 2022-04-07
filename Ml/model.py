@@ -126,6 +126,26 @@ def print_confumatrix(test_gen, preds, print_code, save_dir, subject):
 
 
 
+#function to returns a dataframe where the number of samples for any class specified by column is limited to max samples
+
+
+def trim(dataframe, max_size, min_size, column):
+    dataframe = dataframe.copy()
+    temp_list = []
+    groups = dataframe.groupby(column)
+    for label in dataframe[column].unique():
+        group = groups.get_group(label)
+        ex_count = len(group)
+        if ex_count > max_size:
+            samples = group.sample(max_size, replace=False, weights=None, random_state=123, axis=0).reset_index(
+                drop=True)
+            temp_list.append(samples)
+        elif ex_count >= min_size:
+            temp_list.append(group)
+    dataframe = pd.concat(temp_list, axis=0).reset_index(drop=True)
+    bal = list(dataframe[column].value_counts())
+    print(bal)
+    return dataframe
 
 
 
