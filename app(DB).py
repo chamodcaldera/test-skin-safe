@@ -166,8 +166,11 @@ def registerDoctor():
 def add_channel():
 
     if 'loggedin' in session:
+        if request.method=='POST' and
         conn = mysqldb.connect()
         cursor = conn.cursor()
+
+
 
         date = request.form['date']
         time = request.form['time']
