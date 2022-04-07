@@ -52,38 +52,38 @@
 
                 <div class="row">
 
-                  <div class="col-md-4 form-group mt-3">
-                    <select name="doctor" id="doctor" class="form-select" required>
-                      <option value="">Select Doctor</option>
-                      <option value="Doctor 1">Doctor 1</option>
-                      <option value="Doctor 2">Doctor 2</option>
-                      <option value="Doctor 3">Doctor 3</option>
-                    </select>
-                    <div class="validate"></div>
-                  </div>
+                    <script>
+                      $(document).ready(function() {
+                        $(function() {
+                        $('#datetimepicker1').datetimepicker();
+                        });
+                      });
+                    </script>
 
-                <script>
-                  $(document).ready(function() {
-                    $(function() {
-                    $('#datetimepicker1').datetimepicker();
-                    });
-                  });
-                </script>
-
-                  <div class="col-md-4 form-group mt-3">
-                    <div class ="form-group">
-                      <div class ='input-group date' id='datetimepicker1' >
-                        <input type ='text' class="form-control" placeholder="Appointment Date and Time" required/>
-                        <span class ="input-group-addon">
-                          <span class ="glyphicon glyphicon-calendar"></span>
-                        </span>
+                      <div class="col-md-4 form-group mt-3">
+                        <div class ="form-group">
+                          <div class ='input-group date' id='datetimepicker1' >
+                            <input type ='text' class="form-control" placeholder="Appointment Date and Time" required/>
+                            <span class ="input-group-addon">
+                              <span class ="glyphicon glyphicon-calendar"></span>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="validate"></div>
                       </div>
-                    </div>
-                    <div class="validate"></div>
-                  </div>
-                  <div>
-                      <button class="btn btn-primary" type="submit">Check Option</button>
-                  </div>
+                      <div>
+                          <button class="btn btn-primary" type="submit">Check Option</button>
+                      </div>
+
+                      <div class="col-md-4 form-group mt-3">
+                        <select name="doctor" id="doctor" class="form-select" required>
+                          <option value="">Select Doctor</option>
+                          <option value="Doctor 1">Doctor 1</option>
+                          <option value="Doctor 2">Doctor 2</option>
+                          <option value="Doctor 3">Doctor 3</option>
+                        </select>
+                        <div class="validate"></div>
+                      </div>
 
                 </div>
 

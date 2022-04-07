@@ -7,34 +7,35 @@
 </head>
 <body>
 
-  <main id="main">
-<header class="header">
-		<h1 class="logo"><a href="#">Flexbox</a></h1>
-      <ul class="main-nav">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Portfolio</a></li>
-          <li><a href="#">Contact</a></li>
-      </ul>
-	</header>
+    <main id="main">
+    <header class="header">
+            <h1 class="logo"><a href="#">Flexbox</a></h1>
+          <ul class="main-nav">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Portfolio</a></li>
+              <li><a href="#">Contact</a></li>
+          </ul>
+        </header>
+
+    <h1 class="heading">Scan your skin</h1>
+
+    <form class="form-horizontal" action="/c" method=post enctype="multipart/form-data">
+
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="pwd">Upload Your Image :</label>
+          <div class="col-sm-10">
+            <input type="file" name="image" id="pwd" class="inputfile">
+            <input type=submit value=Upload>
+          </div>
+        </div>
+          </form>
+          <p>  <i> {{msg}}  </i>
+              <p> <i> {{class_name }}  </i></p>
+               <p> <i> {{pre }}  </i></p>
 
 
-<form class="form-horizontal" action="/c" method=post enctype="multipart/form-data">
-
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="pwd">Upload Your Image :</label>
-      <div class="col-sm-10">
-        <input type="file" name="image" id="pwd">
-          <input type=submit value=Upload>
-      </div>
-    </div>
-      </form>
-      <p>  <i> {{msg}}  </i>
-          <p> <i> {{class_name }}  </i></p>
-           <p> <i> {{pre }}  </i></p>
-
-
-  </main>
+      </main>
   <br>
 <footer>
   <div class="footer-gray">
