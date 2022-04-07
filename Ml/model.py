@@ -36,6 +36,37 @@ import logging
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
 
 
+# Function for save ml model
+def save(save_path, model, modelName, subject, accuracy, img_size, scalar, generator):
+
+    save_id = str(modelName + '-' + subject + '-' + str(acc)[:str(acc).rfind('.') + 3] + '.h5')   #model saving name
+    model_save_loc = os.path.join(save_path, save_id)
+    model.save(model_save_loc)
+    print(msg)
+    # now create the class and convert to csv file
+    class_dict = generator.class_indices
+    height = []
+    width = []
+    scale = []
+    for i in range(len(class_dict)):
+        height.append(img_size[0])
+        width.append(img_size[1])
+        scale.append(scalar)
+    Ind_ser = pd.Series(list(class_dict.values()), name='class_index')
+    Cls_ser = pd.Series(list(class_dict.keys()), name='class')
+    Height_ser = pd.Series(height, name='height')
+    Width_ser = pd.Series(width, name='width')
+    Sle_ser = pd.Series(scale, name='scale by')
+    class_df = pd.concat([Ind_ser, Cls_ser, Height_ser, Width_ser, Sle_ser], axis=1)
+    csv = 'class_dict.csv'
+    csv_save = os.path.join(save_path, csv)
+    class_df.to_csv(csv_save, index=False)
+    print('csv file was saved as ' + csv_save)
+    return model_save_loc, csv_save
+
+
+
+
 
 #preprocess the data set
 
@@ -193,4 +224,4 @@ msg = f'accuracy on the test set is {acc:5.2f} %'
 print(msg)
 gen = train_gen
 scale = 1
-model_save_loc, csv_save_loc = modelSaver(working_dir, model, modelName, sub, acc, img_size, scale, gen)
+model_save_loc, csv_save_loc = save(working_dir, model, modelName, sub, acc, img_size, scale, gen)
