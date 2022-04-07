@@ -32,6 +32,85 @@ app.secret_key = 'your secret key'
 # mysql.init_app(app)
 
 
+# User LogIn
+@app.route('/')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    msg = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        conn = mysqldb.connect()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM User WHERE email = %s ', (username))
+        account = cursor.fetchone()
+        if account:
+            check = check_password_hash(account[5], password)
+            if check:
+                session['loggedin'] = True
+                session['id'] = account[0]
+                session['username'] = account[4]
+                msg = 'Logged in successfully !'
+                return render_template('index.html', msg=msg)
+            else:
+                msg = 'Incorrect username / password !'
+
+        else:
+            msg = 'Account dose not exist From this email address '
+
+    return render_template('login.html', msg=msg)
+
+# register user
+@app.route('/registerUser', methods=['GET', 'POST'])
+def register():
+    msg = ''
+    if request.method == 'POST' and 'firstname' in request.form and 'lastname' in request.form and 'age' in request.form and 'email' in request.form and 'password' in request.form and 'gender' in request.form and 'address' in request.form and 'mobNo' in request.form:
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        age = request.form['age']
+        email = request.form['email']
+        password = request.form['password']
+        address = request.form['address']
+        gender = request.form['gender']
+        mobileNo = request.form['mobNo']
+
+
+        conn = mysqldb.connect()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM User WHERE email = %s', (email,))
+        account = cursor.fetchone()
+        if account:
+            msg = 'Account already exists !'
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            msg = 'Invalid email address !'
+        elif containsNumber(firstname) or containsNumber(lastname):
+            msg = 'First name and Last name must contain only characters!'
+        # elif gender.lower()!='female' or gender.lower()!='female' :
+        #     msg = 'Gender'
+        elif validate(mobileNo) or len(mobileNo)>10:
+            # must see the validation here
+            msg = 'Phone Number must contain only 10 numbers!'
+
+        else:
+
+            # do not save password as a plain text
+            _hashed_password = generate_password_hash(password)
+            # save edits
+            sql = "INSERT INTO User(firstName,lastName, age, email, password, gender, address, mobileNo) VALUES(%s, %s, %s,%s, %s, %s,%s, %s)"
+            data = (firstname, lastname, age,email,_hashed_password, gender, address, mobileNo,)
+            # conn = mysql.connect()
+            # cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            msg = 'You have successfully registered !'
+            # return render_template('index.html.html', msg=msg)
+
+
+    elif request.method == 'POST':
+
+        msg = 'Please fill out the form !'
+    return render_template('register.html',msg=msg)
+
 # doctor register
 @app.route('/registerDoctor', methods=['GET', 'POST'])
 def registerDoctor():
