@@ -36,6 +36,102 @@ import logging
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
 
 
+# function for get confusion matrix and classification report
+
+def print_confumatrix(test_gen, preds, print_code, save_dir, subject):
+    class_dict = test_gen.class_indices
+    labels = test_gen.labels
+    filenames = test_gen.filenames
+    error_list = []
+    true_class = []
+    pred_class = []
+    prob_list = []
+    new_dict = {}
+    error_indices = []
+    y_pred = []
+    for key, value in class_dict.items():
+        new_dict[value] = key
+
+    classes = list(new_dict.values())  # string list of class names
+    errors = 0
+    for i, p in enumerate(preds):
+        pred_index = np.argmax(p)
+        true_index = labels[i]  #  integer values
+        if pred_index != true_index:  # if a misclassification has occurred
+            error_list.append(filenames[i])
+            true_class.append(new_dict[true_index])
+            pred_class.append(new_dict[pred_index])
+            prob_list.append(p[pred_index])
+            error_indices.append(true_index)
+            errors = errors + 1
+        y_pred.append(pred_index)
+    if print_code != 0:
+        if errors > 0:
+            if print_code > errors:
+                r = errors
+            else:
+                r = print_code
+            msg = '{0:^28s}{1:^28s}{2:^28s}{3:^16s}'.format('File name', 'Predict Class', 'Actual Class', 'Probability')
+            print(msg)
+            for i in range(r):
+                split1 = os.path.split(error_list[i])
+                split2 = os.path.split(split1[0])
+                fname = split2[1] + '/' + split1[1]
+                msg = '{0:^28s}{1:^28s}{2:^28s}{3:4s}{4:^6.4f}'.format(fname, pred_class[i], true_class[i], ' ',
+                                                                       prob_list[i])
+                print(msg)
+                # print(error_list[i]  , pred_class[i], true_class[i], prob_list[i])
+        else:
+            msg = 'Accuracy is 100 % so no errors to print'
+            print(msg)
+    if errors > 0:
+        plot_bar = []
+        plot_class = []
+        for key, value in new_dict.items():
+            count = error_indices.count(key)
+            if count != 0:
+                plot_bar.append(count)  # list containg how many times a class c had an error
+                plot_class.append(value)  # stores the class
+        fig = plt.figure()
+        fig.set_figheight(len(plot_class) / 3)
+        fig.set_figwidth(10)
+        plt.style.use('fivethirtyeight')
+        for i in range(0, len(plot_class)):
+            c = plot_class[i]
+            x = plot_bar[i]
+            plt.barh(c, x, )
+            plt.title(' Errors occur by Class on Test ')
+    y_true = np.array(labels)
+    y_pred = np.array(y_pred)
+    if len(classes) <= 30:
+        # create a confusion matrix
+        cm = confusion_matrix(y_true, y_pred)
+        length = len(classes)
+        if length < 8:
+            fig_width = 8
+            fig_height = 8
+        else:
+            fig_width = int(length * .5)
+            fig_height = int(length * .5)
+        plt.figure(figsize=(fig_width, fig_height))
+        sns.heatmap(cm, annot=True, vmin=0, fmt='g', cmap='Blues', cbar=False)
+        plt.xticks(np.arange(length) + .5, classes, rotation=90)
+        plt.yticks(np.arange(length) + .5, classes, rotation=0)
+        plt.xlabel("Predicted")
+        plt.ylabel("Actual")
+        plt.title("Confusion Matrix")
+        plt.show()
+    clsreport = classification_report(y_true, y_pred, target_names=classes)
+    print(" Report:\n----------------------\n", clsreport)
+
+
+
+
+
+
+
+
+
 # Function for save ml model
 def save(save_path, model, modelName, subject, accuracy, img_size, scalar, generator):
 
@@ -201,6 +297,9 @@ output = Dense(class_count, activation='softmax')(x)
 model = Model(inputs=base_model.input, outputs=output)
 model.compile(Adamax(lr=.001), loss='categorical_crossentropy', metrics=['accuracy'])
 
+
+#train the model
+
 epochs = 40
 patience = 1  # number of epochs to wait to adjust lr if monitored value does not improve
 stop_patience = 3  # number of epochs to wait before stopping training if monitored value does not improve
@@ -217,6 +316,10 @@ callbacks = [
 history = model.fit(x=train_gen, epochs=epochs, verbose=0, callbacks=callbacks, validation_data=valid_gen,
                     validation_steps=None, shuffle=False, initial_epoch=0)
 
+
+# evaluate model
+# save the model
+
 tr_plot(history, 0)
 sub = 'skin disease'
 acc = model.evaluate(test_gen, batch_size=test_batch_size, verbose=1, steps=test_steps, return_dict=False)[1] * 100
@@ -225,3 +328,15 @@ print(msg)
 gen = train_gen
 scale = 1
 model_save_loc, csv_save_loc = save(working_dir, model, modelName, sub, acc, img_size, scale, gen)
+
+
+print_code=0
+preds=model.predict(test_gen, steps=test_steps, verbose=1)
+print_confumatrix( test_gen, preds, print_code, working_dir, subject )
+
+
+
+
+
+
+
