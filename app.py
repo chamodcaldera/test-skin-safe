@@ -149,8 +149,8 @@ def upload_predict():
 
 
 
-@app.route('/submit', methods=['GET', 'POST'])
-def predict_img():
+@app.route('/')
+def home():
     return render_template("channelling.html")
 
 
