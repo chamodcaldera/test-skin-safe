@@ -322,7 +322,7 @@ def balance_data(train_df, max_samples, min_samples, column, working_dir, image_
 max_samples = 1006
 min_samples = 0
 column = 'labels'
-working_dir = r'./'
+working_dir = r'/'
 img_size = (300, 300)
 usc = balance_data(train_df, max_samples, min_samples, column, working_dir, img_size)
 
