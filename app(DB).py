@@ -162,27 +162,27 @@ def registerDoctor():
 
 # add appointments
 
-@app.route('/addChannel', methods=['POST'])
-def add_channel():
+# @app.route('/addChannel', methods=['POST'])
+# def add_channel():
 
-    if 'loggedin' in session:
-        if request.method=='POST' and
-        conn = mysqldb.connect()
-        cursor = conn.cursor()
+ #if 'loggedin' in session:
+#if request.method=='POST' and
+#conn = mysqldb.connect()
+#cursor = conn.cursor()
 
 
 
-        date = request.form['date']
-        time = request.form['time']
-        doctorId = request.form['doctorId']
-        status = request.form['status']
-
-        sql = "INSERT INTO Chanelling(id,channel_date ,channel_time , docterId , receipt ) VALUES(%s, %s, %s,%s, %s)"
-        data = ((session['id']), date, time, doctorId, status,)
-        cursor.execute(sql, data)
-        conn.commit()
-        return render_template("channelingReceipt.html")
-    return redirect(url_for('login'))
+#     date = request.form['date']
+#     time = request.form['time']
+    #     doctorId = request.form['doctorId']
+    #     status = request.form['status']
+    #
+    #     sql = "INSERT INTO Chanelling(id,channel_date ,channel_time , docterId , receipt ) VALUES(%s, %s, %s,%s, %s)"
+    #     data = ((session['id']), date, time, doctorId, status,)
+    #     cursor.execute(sql, data)
+    #     conn.commit()
+    #     return render_template("channelingReceipt.html")
+    # return redirect(url_for('login'))
 
 # add prescription
 
